@@ -1,0 +1,63 @@
+CREATE DATABASE basdat;
+
+\c basdat;
+
+CREATE TABLE users(
+id SERIAL PRIMARY KEY,
+nama_lengkap VARCHAR(255) NOT NULL,
+no_telp VARCHAR(255) NOT NULL,
+email VARCHAR(255) NOT NULL,
+username VARCHAR(255) NOT NULL,
+password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE kategori(
+id SERIAL PRIMARY KEY,
+nama VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE makanan(
+id SERIAL PRIMARY KEY,
+id_kategori INT NOT NULL,
+nama VARCHAR(255) NOT NULL,
+harga INT NOT NULL,
+CONSTRAINT makanan_id_kategori_fkey FOREIGN KEY (id_kategori)
+	REFERENCES kategori (id) MATCH SIMPLE
+	ON UPDATE NO ACTION ON DELETE SET NULL
+);
+
+CREATE TABLE pesanan(
+id SERIAL NOT NULL,
+id_users INT NOT NULL,
+id_makanan INT NOT NULL,
+alamat_tujuan VARCHAR(255) NOT NULL,
+kuantitas INT NOT NULL,
+PRIMARY KEY (id, id_users, id_makanan),
+CONSTRAINT pesanan_id_users_fkey FOREIGN KEY (id_users)
+	REFERENCES users (id) MATCH SIMPLE
+	ON UPDATE NO ACTION ON DELETE SET NULL,
+CONSTRAINT pesanan_id_makanan_fkey FOREIGN KEY (id_makanan)
+	REFERENCES makanan (id) MATCH SIMPLE
+	ON UPDATE NO ACTION ON DELETE SET NULL
+);
+
+
+
+INSERT INTO kategori (id, nama) VALUES (1, 'Nasi');
+INSERT INTO kategori (id, nama) VALUES (2, 'Mie');
+INSERT INTO kategori (id, nama) VALUES (3, 'Fastfood');
+INSERT INTO kategori (id, nama) VALUES (4, 'Ayam');
+INSERT INTO kategori (id, nama) VALUES (5, 'Bebek');
+
+INSERT INTO makanan (id, id_kategori, nama, harga) VALUES (1, 1, 'Nasi Goreng', 12000);
+INSERT INTO makanan (id, id_kategori, nama, harga) VALUES (2, 1, 'Nasi Kebuli', 15000);
+INSERT INTO makanan (id, id_kategori, nama, harga) VALUES (3, 2, 'Mie Goreng', 10000);
+INSERT INTO makanan (id, id_kategori, nama, harga) VALUES (4, 2, 'Mie Rebus', 10000);
+INSERT INTO makanan (id, id_kategori, nama, harga) VALUES (5, 3, 'Burger', 18000);
+INSERT INTO makanan (id, id_kategori, nama, harga) VALUES (6, 4, 'Ayam Sambal Ijo', 15000);
+INSERT INTO makanan (id, id_kategori, nama, harga) VALUES (7, 5, 'Bebek Goreng Sambal Mangga', 18000);
+
+
+
+
+tanggal_pemesanan TIMESTAMP WITHOUT TIME ZONE NOT NULL,
